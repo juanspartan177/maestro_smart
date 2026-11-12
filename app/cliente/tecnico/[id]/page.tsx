@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Wrench, Star, MapPin, DollarSign, ArrowLeft, CheckCircle, Calendar, MessageSquare, Award, Heart } from 'lucide-react';
 
+export const dynamic = 'force-dynamic'; // Forzar la regeneración de la página en cada solicitud
+
 export default function PerfilTecnicoClientePage() {
   const router = useRouter();
   const params = useParams();
