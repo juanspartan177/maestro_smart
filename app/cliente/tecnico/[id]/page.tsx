@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Wrench, Star, MapPin, DollarSign, ArrowLeft, CheckCircle, Calendar, MessageSquare, Award, Heart } from 'lucide-react';
 
-export const dynamic = 'force-dynamic'; // Forzar la regeneración de la página en cada solicitud
-
-export default function PerfilTecnicoClientePage() {
+function PerfilTecnicoContent() {
   const router = useRouter();
   const params = useParams();
   const tecnicoId = Array.isArray(params.id) ? params.id[0] : (params.id as string);
@@ -21,7 +19,6 @@ export default function PerfilTecnicoClientePage() {
     if (role === 'CLIENTE' || role === 'TECNICO') {
       setIsLoggedIn(true);
 
-      // Cargar favoritos guardados en localStorage
       const savedFavs = localStorage.getItem('cliente_favoritos');
       if (savedFavs) {
         setFavoritos(JSON.parse(savedFavs));
@@ -94,7 +91,6 @@ export default function PerfilTecnicoClientePage() {
   }, [tecnicoId]);
 
   const toggleFavorito = () => {
-    // Si NO está logueado, guardamos el ID pendiente y lo mandamos al login
     if (!isLoggedIn) {
       localStorage.setItem('pending_favorite', tecnicoId);
       router.push('/login');
@@ -244,5 +240,13 @@ export default function PerfilTecnicoClientePage() {
 
       </div>
     </div>
+  );
+}
+
+export default function PerfilTecnicoClientePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-900 text-white flex items-center justify-center">Cargando perfil...</div>}>
+      <PerfilTecnicoContent />
+    </Suspense>
   );
 }
